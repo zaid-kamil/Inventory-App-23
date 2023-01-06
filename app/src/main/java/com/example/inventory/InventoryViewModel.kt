@@ -43,6 +43,23 @@ class InventoryViewModel(private val itemDao: ItemDao) : ViewModel() {
             itemDao.deleteItem(item)
         }
     }
+
+    fun updateItem(item: Item) {
+        viewModelScope.launch {
+            itemDao.updateItem(item)
+        }
+    }
+
+    fun isStockAvailable(item: Item): Boolean {
+        return item.quantityInStock > 0
+    }
+
+    fun sellItem(item: Item) {
+        if (isStockAvailable(item)) {
+            val updatedItem = item.copy(quantityInStock = item.quantityInStock - 1)
+            updateItem(updatedItem)
+        }
+    }
 }
 
 class InventoryViewModelFactory(private val itemDao: ItemDao) : ViewModelProvider.Factory {

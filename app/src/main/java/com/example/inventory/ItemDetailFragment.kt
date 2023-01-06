@@ -80,9 +80,6 @@ class ItemDetailFragment : Fragment() {
             item = it
             bind(item)
         }
-        binding.deleteItem.setOnClickListener {
-            showConfirmationDialog()
-        }
     }
 
     private fun bind(item: Item) {
@@ -90,6 +87,11 @@ class ItemDetailFragment : Fragment() {
             itemName.text = item.itemName
             itemCount.text = item.quantityInStock.toString()
             itemPrice.text = item.getFormattedPrice()
+            deleteItem.setOnClickListener {
+                showConfirmationDialog()
+            }
+            sellItem.isEnabled = viewModel.isStockAvailable(item)
+            sellItem.setOnClickListener { viewModel.sellItem(item) }
         }
     }
 
